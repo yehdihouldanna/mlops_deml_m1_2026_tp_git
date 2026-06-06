@@ -5,6 +5,10 @@ import random
 # --- Data engineering and machine learning ---
 # --- MLOPS class ---
 
+print("--------------------------------------------------------")
+print("ML Pipeline: From Data to Metrics")
+print("--------------------------------------------------------")
+
 def load_data():
     """Iris dataset hardcoded as (sepal_len, sepal_w, petal_len, petal_w, label)."""
     raw = [
