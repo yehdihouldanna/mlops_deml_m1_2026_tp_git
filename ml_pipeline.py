@@ -2,7 +2,8 @@ import math
 import random
 
 
-# --- Data ---
+# --- Data engineering and machine learning ---
+# --- MLOPS class ---
 
 def load_data():
     """Iris dataset hardcoded as (sepal_len, sepal_w, petal_len, petal_w, label)."""
