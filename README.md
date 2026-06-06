@@ -26,6 +26,12 @@ Le but de cet etape et des crée un serveur MLFlow, qui gère le registry de nos
 2. Crée un bucket s3, (rendre son accès public - pour minimiser les configuration nécessaire entre s3 et MLFLOW)
 4. Crée un clé d'accès (Access Key) et  telecharger la, dans le fichier csv (vous trouvez votre Access_key_Id et Votre Secret_key).
 5. Crée une machine Ec2 (type medium, OS:ubuntu), crée un key paire pour cette machine. donnez lui un accès Custom Port 5000 avec source 0.0.0.0/0 (tous le monde), 
+    5.1 Connecter sur cette machine avec ssh : 
+    `chmod 600 VOTRE_CLE.pem`
+    `ssh -i /Users/yehdhihanna/Local-Documents/Teaching/MLOps_SupNum_DELM/2026/2026-m1-yehdih-lab3.pem ubuntu@51.44.165.217`
+    5.2 OU connecter sur la machine depuis l'interface aws avec le boutton connect
+
+
 6. sur cette machine on doit configurer notre MLFLOW avec les commandes suivantes (y inclut l'installation de quelques dependances) : 
 ```bash
 sudo apt update
@@ -85,3 +91,5 @@ mlflow.set_tracking_uri("http://ADDRESS_IP_EC2:5000")
 ```
 
 > TRES BIEN VOUS AVEZ COMPLETE CETTE ETAPE.
+
+
