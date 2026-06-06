@@ -1,8 +1,22 @@
+import subprocess
 import math
 import random
 
 
-# --- Data ---
+# --- Data engineering and machine learning ---
+# --- MLOPS class ---
+
+print("--------------------------------------------------------")
+print("ML Pipeline: From Data to Metrics")
+print("--------------------------------------------------------")
+
+
+print(subprocess.run(["git", "--version"], capture_output=True, text=True).stdout)
+
+#get commit info
+
+print(subprocess.run(["git", "log", "-1"], capture_output=True, text=True).stdout)
+
 
 def load_data():
     """Iris dataset hardcoded as (sepal_len, sepal_w, petal_len, petal_w, label)."""

@@ -1,23 +1,8 @@
-# mlops_deml_m1_2026_tp_git
-Un repository pour le TP git pour les elèves SUPNUM DEML M1 2026
-
-# LAB 2 : Git Seance interactive :
-
-1. Crée un dossier pour le TP "TP Git"
-2. Accepter l'invitation sur le repository
-3. Allez dans votre dossier TP Git et cloner le repository du cours
-`git clone git@github.com:yehdihouldanna/mlops_deml_m1_2026_tp_git.git`
-4. Crée une branche avec votre nom :
-    4.1 `git create branch BRANCHE_NAME`
-    4.2 depuis le UI de github.
-    4.3 aussi vous pouvez le faire avec `git checkout -b BRANCH_NAME`
-4. Switcher la branche de travail local sur le votre
-`git checkout VOTRE_BRANCH_NAME`
-ex : `git checkout yehdih`
+# TP DEPLOY MLFLOW SUR UNE MACHINE AWS EC2
 
 
 
-# LAB 3 : Serveur MLFlow sur EC2 
+# LAB 3 : Serveur MLFlow sur EC2 :
 ## 1.1. Mise de l'environement MLFLOW sur AWS : 
 
 Le but de cet etape et des crée un serveur MLFlow, qui gère le registry de nos experiences MLs:
