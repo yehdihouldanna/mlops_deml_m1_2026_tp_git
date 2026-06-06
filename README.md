@@ -31,8 +31,12 @@ Le but de cet etape et des crée un serveur MLFlow, qui gère le registry de nos
 
 ```bash
     chmod 600 VOTRE_CLE.pem
+    ssh -i VOTRE_CLE.pem ubuntu@ADRESSE_IP_PUBLIC_EC2
+    
+    # example 
     ssh -i /Users/yehdhihanna/Local-Documents/Teaching/MLOps_SupNum_DELM/2026/2026-m1-yehdih-lab3.pem ubuntu@51.44.165.217
 ```
+
 
 - 5.2 OU connecter sur la machine depuis l'interface aws avec le boutton connect
 
@@ -63,6 +67,9 @@ aws configure
     # run mlflow server to be accessible globaly
     mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://YOUR_BUCKET_NAME --allowed-hosts "*" --cors-allowed-origins "*" 
 ```
+
+    # run mlflow server to be accessible globaly
+    mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://2026-m1-yehdih-lab3-mlflow-sur-ec2 --allowed-hosts "*" --cors-allowed-origins "*" 
 
 6. [Conditionel] Si vous avez skipper le custom port 5000 accès vous pouvez allez dans la liste des instances EC2, clicker sur l'ID de votre instance, et dans l'onglet Security clicker sur le nom de votre security group,
 et ajouter une nouvelle règle dans les inboud rules. 
