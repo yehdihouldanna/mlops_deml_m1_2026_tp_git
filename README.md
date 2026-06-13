@@ -130,6 +130,13 @@ Donc vous devrez avoir ce chemin dans votre bucket s3
 2. crée une repository dvc  (attention : il faut crée cette dossier dans le meme dossier que votre git.)
 (La ceci est le store c'est à dire il contient notre tree dvc)
 
+configure local pc to communicate with aws:
+
+```bash
+conda install -c conda-forge awscli boto3
+aws configure
+```
+
 ```bash
     dvc init
     conda install dvc[s3]
@@ -147,6 +154,9 @@ Donc vous devrez avoir ce chemin dans votre bucket s3
     dvc import-url s3://YOUR_BUCKET_NAME/data/ .
     dvc import-url s3://lab1-s3-yana/data/ .
     #dvc import-url --to-remote s3://YOUR_BUCKET_NAME/data/ .
+
+
+    dvc add data
     dvc push # now you can check on your s3 to see the result
 ```
 > --to-remote permet de n'a pas avoir une copie local du fichier dans le dossier du code (la copie sera telechargé ailleur et son hash md5 sera claculé et sera supprimé après), si vous l'enlever le fichier sera dans votre dossier data
