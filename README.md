@@ -105,3 +105,85 @@ mlflow.set_tracking_uri("http://ADDRESS_IP_EC2:5000")
 > TRES BIEN VOUS AVEZ COMPLETE CETTE ETAPE.
 
 
+
+# LAB 4 : dvc (Data version control)
+
+
+## 4.1. Data Originale (Source de données) :
+Pour similer une situation du monde réel avec une source de données externe dynamique nous allons crée sur notre bucket s3 un dossier dédié pour les données raw (ceci pourra venir de plusieurs sources).
+
+Dans votre bucket S3 crée les dossier ``data/raw`` et uploader votre fichier ``diabetes.csv``
+en meme temps crée aussi le dossier ``data/processed``
+
+Donc vous devrez avoir ce chemin dans votre bucket s3
+`s3://YOUR_BUCKET_NAME/data/raw/diabetes.csv`
+
+> Dans le monde réel ceci pourra simuler le resultat d'un ETL lourd
+
+## 4.2. Repository dvc sur s3 :
+
+> Il existe des outils pour faire le repository dvc, cependant il faut comprendre que le dvc crée un fichier d'historique des metadata des données (elle ne stocke pas les données, mais chaque push de dvc correspond à un etat 'metadata' de données, elle peut contenir le path, sans contenir les données eux memes.)
+> Cependant nous allons heberger notre repository dvc sur s3 c'est simple comme ça.
+> Du coup on a deux chose à garder sur notre s3, nos données de base (n'a rien avoir avec dvc nécessairement, on peut avoir des données qui sont misees à jour journalierement)
+
+1. initier dvc avec `dvc init`
+2. crée une repository dvc  (attention : il faut crée cette dossier dans le meme dossier que votre git.)
+(La ceci est le store c'est à dire il contient notre tree dvc)
+
+```bash
+    dvc init
+    conda install dvc[s3]
+
+    # 1. Define where DVC should store its actual "packages" (The Cache)
+    dvc remote add -d dvcstore s3://YOUR_BUCKET_NAME
+
+    # 2. Tell DVC to use your AWS credentials
+    dvc remote modify dvcstore access_key_id   VOTRE_ACCESS_KEY_ID
+    dvc remote modify dvcstore secret_access_key VOTRE_SECRET_ACCESS_KEY
+```
+3. Ajouter la source de données à tracker : 
+
+```bash
+    dvc import-url s3://YOUR_BUCKET_NAME/data/ .
+    dvc import-url s3://lab1-s3-yana/data/ .
+    #dvc import-url --to-remote s3://YOUR_BUCKET_NAME/data/ .
+    dvc push # now you can check on your s3 to see the result
+```
+> --to-remote permet de n'a pas avoir une copie local du fichier dans le dossier du code (la copie sera telechargé ailleur et son hash md5 sera claculé et sera supprimé après), si vous l'enlever le fichier sera dans votre dossier data
+
+## 4.3. Adjuster votre fichier params :
+
+ex:
+```yaml
+preprocess:
+  input: "s3://lab1-s3-yana/data/raw/diabetes.csv". # Original data source
+  output: "data/processed/data.csv" 
+
+train : 
+  data : data/processed/data.csv
+  model_path : models/model.pkl
+  random_state : 42
+  n_estimators: 100
+  max_depth: 5
+
+mlflow: 
+  MLFLOW_TRACKING_URI : http://EC2-PUBLIC-IP-ADRESS:5000
+aws :
+  aws_access_key_id: YOUR_ACCESS_KEY
+  aws_secret_access_key: YOUR_SECRET_ACESS_KEY
+  region_name: AWS_REGION
+```
+> Ce fichier assume que votre code preprocessing (utilise des données diabetes csv local [ou traked avec dvc et pulled]), applique le preprocessing pour sauvergarder une version preprocessed sur s3, et utlise la version sauvegardé sur s3 pour faire le training.
+> EN suite le fichier evaluate utilise le mlflow running sur ec2 pour recuperer la version nommé dans le code de votre modèle pour l'appeler.
+
+## 4.4 La commande qui automatise le lancement du pipeline dvc :
+Maintenant avec la façon dont notre code est structuré en phases (preprocess et train)
+nous pouvons lancer tous le flow quand on veut avec 
+
+```bash
+dvc repro
+```
+
+
+---
+
