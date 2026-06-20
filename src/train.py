@@ -12,9 +12,11 @@ import pandas as pd
 import yaml
 
 params = yaml.safe_load(open("params.yaml"))["mlflow"]
+aws_params = yaml.safe_load(open("params.yaml"))["aws"]
 
-MLFLOW_TRACKING_URI  = params["MLFLOW_TRACKING_URI"]
-EXPERIMENT_NAME = params["EXPERIMENT_NAME"]
+MLFLOW_TRACKING_URI = "http://15.237.119.156:5000"
+MLFLOW_TRACKING_URI = "http://localhost:5050"
+EXPERIMENT_NAME = "Student_Experiment"
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 mlflow.set_experiment(EXPERIMENT_NAME)
@@ -22,7 +24,8 @@ mlflow.set_experiment(EXPERIMENT_NAME)
 def train_model(data_path, model_output_path):
 
     # Load the preprocessed data
-    df = pd.read_csv(data_path)
+    storage_options={"key": aws_params['aws_access_key_id'], "secret": aws_params['aws_secret_access_key']}
+    df = pd.read_csv(data_path, storage_options=storage_options)
     
     # Split the data into features and target variable
     X = df.drop("GPA", axis=1)
@@ -54,8 +57,10 @@ def train_model(data_path, model_output_path):
         mlflow.sklearn.save_model(model, model_output_path)
 
 if __name__ == "__main__":
-    params_train = yaml.safe_load(open("params.yaml"))["train"]
-    data_path = params_train["data"]
-    model_output_path = params_train["model_path"]
-
+    data_path = "data/processed/data_processed.csv"
+    model_output_path = "models/linear_regression_model"
+    
+    data_path = "data/processed/data_processed.csv"
+    model_output_path = "models/linear_regression_model"
+    
     train_model(data_path, model_output_path)

@@ -1,15 +1,19 @@
 preprocess:
-  input : data/raw/data.csv
-  output : data/processed/data_processed.csv
+  input : s3://2026-m1-yehdih-lab3-mlflow-sur-ec2/data/raw/data.csv
+  output : s3://2026-m1-yehdih-lab3-mlflow-sur-ec2/data//processed/data_processed.csv
 
 train : 
-  data: data/processed/data_processed.csv
+  data: s3://2026-m1-yehdih-lab3-mlflow-sur-ec2/data/processed/data_processed.csv
   model_path : models/model.pkl
 
 evaluate :
   model_path : models/model.pkl
-  data_path : data/processed/data_processed.csv
+  data_path : s3://2026-m1-yehdih-lab3-mlflow-sur-ec2/data/processed/data_processed.csv
 
+aws :
+  aws_access_key_id: *
+  aws_secret_access_key: *
+  region_name: eu-west-3
 
 
   # random_state : 42
@@ -18,6 +22,5 @@ evaluate :
 
 mlflow:
   MLFLOW_TRACKING_URI: http://localhost:5050/
-  EXPERIMENT_NAME: "Student_Experiment"
-
   # MLFLOW_TRACKING_URI = "http://15.237.119.156:5000"
+  EXPERIMENT_NAME: "Student_Experiment"
