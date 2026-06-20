@@ -110,17 +110,17 @@ mlflow.set_tracking_uri("http://ADDRESS_IP_EC2:5000")
 
 
 
-# LAB 4 : dvc (Data version control)
+# LAB 4 & 5 : dvc (Data version control)
 
 
 ## 4.1. Data Originale (Source de données) :
 Pour similer une situation du monde réel avec une source de données externe dynamique nous allons crée sur notre bucket s3 un dossier dédié pour les données raw (ceci pourra venir de plusieurs sources).
 
-Dans votre bucket S3 crée les dossier ``data/raw`` et uploader votre fichier ``diabetes.csv``
+Dans votre bucket S3 crée les dossier ``data/raw`` et uploader votre fichier ``data.csv``
 en meme temps crée aussi le dossier ``data/processed``
 
 Donc vous devrez avoir ce chemin dans votre bucket s3
-`s3://YOUR_BUCKET_NAME/data/raw/diabetes.csv`
+`s3://YOUR_BUCKET_NAME/data/raw/data.csv`
 
 > Dans le monde réel ceci pourra simuler le resultat d'un ETL lourd
 
@@ -170,22 +170,26 @@ aws configure
 ex:
 ```yaml
 preprocess:
-  input: "s3://lab1-s3-yana/data/raw/diabetes.csv". # Original data source
-  output: "data/processed/data.csv" 
+  input : s3://YOUR_BUCKET/data/raw/data.csv
+  output : s3://YOUR_BUCKET/data//processed/data_processed.csv
 
 train : 
-  data : data/processed/data.csv
+  data: s3://YOUR_BUCKET/data/processed/data_processed.csv
   model_path : models/model.pkl
-  random_state : 42
-  n_estimators: 100
-  max_depth: 5
 
-mlflow: 
-  MLFLOW_TRACKING_URI : http://EC2-PUBLIC-IP-ADRESS:5000
+evaluate :
+  model_path : models/model.pkl
+  data_path : s3://YOUR_BUCKET/data/processed/data_processed.csv
+
 aws :
-  aws_access_key_id: YOUR_ACCESS_KEY
-  aws_secret_access_key: YOUR_SECRET_ACESS_KEY
-  region_name: AWS_REGION
+  aws_access_key_id: *
+  aws_secret_access_key: *
+  region_name: eu-west-3
+
+mlflow:
+  MLFLOW_TRACKING_URI: "http://YOUR_IP_ADRESS:5000"
+#   MLFLOW_TRACKING_URI: http://localhost:5050/
+  EXPERIMENT_NAME: "Student_Experiment"
 ```
 > Ce fichier assume que votre code preprocessing (utilise des données diabetes csv local [ou traked avec dvc et pulled]), applique le preprocessing pour sauvergarder une version preprocessed sur s3, et utlise la version sauvegardé sur s3 pour faire le training.
 > EN suite le fichier evaluate utilise le mlflow running sur ec2 pour recuperer la version nommé dans le code de votre modèle pour l'appeler.
@@ -197,7 +201,8 @@ nous pouvons lancer tous le flow quand on veut avec
 ```bash
 dvc repro
 ```
-
+et vous devrais voir les sorties des données dans votre bucket s3
+et les modèles dans l'interface de mlflow server.
 
 ---
 

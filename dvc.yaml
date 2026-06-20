@@ -1,20 +1,9 @@
 stages:
   preprocess:
     cmd: python src/preprocess.py
-    deps:
-      - data/raw/data.csv
-      - src/preprocess.py
-    outs:
-      - data/processed/data_processed.csv
 
   train:
     cmd: python src/train.py
-    deps:
-      - src/train.py
-      - data/processed/data_processed.csv
-   
+
   evaluate:
     cmd: python src/evaluate.py
-    deps:
-      - src/evaluate.py
-      - data/processed/data_processed.csv

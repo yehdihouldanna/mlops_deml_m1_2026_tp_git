@@ -1,16 +1,11 @@
-import pandas as pd
-from ruamel import yaml
-from sklearn.linear_model import LinearRegression
-import joblib
 import mlflow
+import pandas as pd
+import yaml
+from sklearn.linear_model import LinearRegression
 
-from ruamel.yaml import YAML
+params = yaml.safe_load(open("params.yaml"))["mlflow"]
+aws_params = yaml.safe_load(open("params.yaml"))["aws"]
 
-yaml_parser = YAML(typ='safe', pure=True)
-with open("params.yaml", "r") as f:
-    params = yaml_parser.load(f)["mlflow"]
-
-# params = yaml.safe_load(open("params.yaml"))["mlflow"]
 MLFLOW_TRACKING_URI  = params["MLFLOW_TRACKING_URI"]
 EXPERIMENT_NAME = params["EXPERIMENT_NAME"]
 
@@ -19,7 +14,8 @@ mlflow.set_experiment(EXPERIMENT_NAME)
 
 def evaluate_model(model, data_path):
     # Load the preprocessed data
-    df = pd.read_csv(data_path)
+    storage_options={"key": aws_params['aws_access_key_id'], "secret": aws_params['aws_secret_access_key']}
+    df = pd.read_csv(data_path, storage_options=storage_options)
     
     # Split the data into features and target variable
     X = df.drop("GPA", axis=1)
@@ -39,10 +35,8 @@ def evaluate_model(model, data_path):
     return score, rmse
 
 if __name__ == "__main__":
-    
-    yaml_parser = YAML(typ='safe', pure=True)
-    with open("params.yaml", "r") as f:
-        params = yaml_parser.load(f)["evaluate"]
+
+    params = yaml.safe_load(open("params.yaml"))["evaluate"]
 
     model_path = params["model_path"]
     data_path = params["data_path"]
