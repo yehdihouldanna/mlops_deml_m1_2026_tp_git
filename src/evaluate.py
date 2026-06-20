@@ -1,11 +1,18 @@
 import pandas as pd
+from ruamel import yaml
 from sklearn.linear_model import LinearRegression
 import joblib
 import mlflow
 
-MLFLOW_TRACKING_URI = "http://15.237.119.156:5000"
-MLFLOW_TRACKING_URI = "http://localhost:5050"
-EXPERIMENT_NAME = "Student_Experiment"
+from ruamel.yaml import YAML
+
+yaml_parser = YAML(typ='safe', pure=True)
+with open("params.yaml", "r") as f:
+    params = yaml_parser.load(f)["mlflow"]
+
+# params = yaml.safe_load(open("params.yaml"))["mlflow"]
+MLFLOW_TRACKING_URI  = params["MLFLOW_TRACKING_URI"]
+EXPERIMENT_NAME = params["EXPERIMENT_NAME"]
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 mlflow.set_experiment(EXPERIMENT_NAME)
@@ -33,8 +40,12 @@ def evaluate_model(model, data_path):
 
 if __name__ == "__main__":
     
-    model_path = "models/linear_regression_model"
-    data_path = "data/processed/data_processed.csv"
+    yaml_parser = YAML(typ='safe', pure=True)
+    with open("params.yaml", "r") as f:
+        params = yaml_parser.load(f)["evaluate"]
+
+    model_path = params["model_path"]
+    data_path = params["data_path"]
     
     # Load the trained model
     model = mlflow.sklearn.load_model(model_path)
