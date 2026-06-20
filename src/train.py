@@ -14,9 +14,8 @@ import yaml
 params = yaml.safe_load(open("params.yaml"))["mlflow"]
 aws_params = yaml.safe_load(open("params.yaml"))["aws"]
 
-MLFLOW_TRACKING_URI = "http://15.237.119.156:5000"
-MLFLOW_TRACKING_URI = "http://localhost:5050"
-EXPERIMENT_NAME = "Student_Experiment"
+MLFLOW_TRACKING_URI  = params["MLFLOW_TRACKING_URI"]
+EXPERIMENT_NAME = params["EXPERIMENT_NAME"]
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 mlflow.set_experiment(EXPERIMENT_NAME)
