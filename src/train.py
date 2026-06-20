@@ -1,4 +1,6 @@
 
+import shutil
+
 import mlflow
 # Train a simple model (e.g., Logistic Regression)
 from sklearn.model_selection import train_test_split
@@ -39,8 +41,12 @@ def train_model(data_path, model_output_path):
         mlflow.log_metric("RMSE", rmse)
         mlflow.sklearn.log_model(model, "linear_regression_model")
         
+        dir = os.path.dirname(model_output_path)
+        if os.path.exists(dir):
+            shutil.rmtree(dir)
+        os.makedirs(dir)
         # Path to save the model
-        os.makedirs(os.path.dirname(model_output_path), exist_ok=True)
+        os.makedirs(dir, exist_ok=True)
 
         # Save the model on the mlflow server registry
         mlflow.sklearn.save_model(model, model_output_path)

@@ -1,0 +1,9 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+
+  train:
+    cmd: python src/train.py
+
+  evaluate:
+    cmd: python src/evaluate.py
