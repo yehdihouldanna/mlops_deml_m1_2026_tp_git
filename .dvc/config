@@ -1,0 +1,4 @@
+[core]
+    remote = dvcstore
+['remote "dvcstore"']
+    url = s3://2026-m1-yehdih-lab3-mlflow-sur-ec2
