@@ -1,0 +1,23 @@
+preprocess:
+  input : data/raw/data.csv
+  output : data/processed/data_processed.csv
+
+train : 
+  data: data/processed/data_processed.csv
+  model_path : models/model.pkl
+
+evaluate :
+  model_path : models/model.pkl
+  data_path : data/processed/data_processed.csv
+
+
+
+  # random_state : 42
+  # n_estimators: 100
+  # max_depth: 5
+
+mlflow:
+  MLFLOW_TRACKING_URI: http://localhost:5050/
+  EXPERIMENT_NAME: "Student_Experiment"
+
+  # MLFLOW_TRACKING_URI = "http://15.237.119.156:5000"

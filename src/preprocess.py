@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import yaml
 
 def read_data(path):
     df = pd.read_csv(path)
@@ -21,9 +22,10 @@ def save_data(df, output_path):
 
 if __name__ == "__main__":
 
-    path = "data/raw/data.csv"
-    output_path = "data/processed/data_processed.csv"
-    
+    params = yaml.safe_load(open("params.yaml"))["preprocess"]
+    path = params["input"]
+    output_path = params["output"]
+
     df = read_data(path)
     df_processed = preprocess_data(df)
     save_data(df_processed, output_path)

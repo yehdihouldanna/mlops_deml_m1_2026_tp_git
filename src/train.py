@@ -9,10 +9,12 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import accuracy_score
 import os
 import pandas as pd
+import yaml
 
-MLFLOW_TRACKING_URI = "http://15.237.119.156:5000"
-MLFLOW_TRACKING_URI = "http://localhost:5050"
-EXPERIMENT_NAME = "Student_Experiment"
+params = yaml.safe_load(open("params.yaml"))["mlflow"]
+
+MLFLOW_TRACKING_URI  = params["MLFLOW_TRACKING_URI"]
+EXPERIMENT_NAME = params["EXPERIMENT_NAME"]
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 mlflow.set_experiment(EXPERIMENT_NAME)
@@ -52,7 +54,8 @@ def train_model(data_path, model_output_path):
         mlflow.sklearn.save_model(model, model_output_path)
 
 if __name__ == "__main__":
-    data_path = "data/processed/data_processed.csv"
-    model_output_path = "models/linear_regression_model"
-    
+    params_train = yaml.safe_load(open("params.yaml"))["train"]
+    data_path = params_train["data"]
+    model_output_path = params_train["model_path"]
+
     train_model(data_path, model_output_path)
