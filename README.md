@@ -35,6 +35,7 @@ Le but de cet etape et des crée un serveur MLFlow, qui gère le registry de nos
     
     # example 
     ssh -i /Users/yehdhihanna/Local-Documents/Teaching/MLOps_SupNum_DELM/2026/2026-m1-yehdih-lab3.pem ubuntu@51.44.165.217
+    ssh -i /Users/yehdhihanna/Local-Documents/Teaching/MLOps_SupNum_DELM/2026/2026-m1-yehdih-lab3.pem ubuntu@15.237.119.156
 ```
 
 
@@ -83,6 +84,9 @@ _Custom - Port 5000 - 0.0.0.0/0_
     cd mlflow
     pipenv shell
     mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://YOUR_BUCKET_NAME --allowed-hosts "*" --cors-allowed-origins "*" 
+    cd mlflow
+    pipenv shell
+    mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://2026-m1-yehdih-lab3-mlflow-sur-ec2 --allowed-hosts "*" --cors-allowed-origins "*" 
     cd mlflow
     pipenv shell
     mlflow server --host 0.0.0.0 --port 5000 --default-artifact-root s3://lab1-s3-yana --allowed-hosts "*" --cors-allowed-origins "*" 
